@@ -1,8 +1,9 @@
+import dotenv from "dotenv";
+
 import { server } from "./setup.js";
 
-const host = process.env.HOST;
-const apiPort = process.env.API_PORT;
+dotenv.config();
 
-server.listen(apiPort, host, () => {
-    console.log(`API server running at http://${host}:${apiPort}`);
+server.listen(process.env.API_PORT, process.env.HOST, () => {
+    console.log("API server running!");
 });
