@@ -1,8 +1,8 @@
 import { server } from "./setup.js";
 
-const host = "localhost";
-const port = 3000;
+const host = process.env.HOST;
+const apiPort = process.env.API_PORT;
 
-server.listen(port, host, () => {
-    console.log(`API server running at http://${host}:${port}`);
+server.listen(apiPort, host, () => {
+    console.log(`API server running at http://${host}:${apiPort}`);
 });
