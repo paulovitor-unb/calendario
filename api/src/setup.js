@@ -15,5 +15,4 @@ server.use(router.allowedMethods());
 
 dotenv.config();
 
-//dbObj.dropTable();
-dbMethods.createTable();
+dbMethods.createTasksTable();

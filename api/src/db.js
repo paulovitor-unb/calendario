@@ -16,48 +16,69 @@ function openDb() {
 }
 
 export const dbMethods = {
-    createTable: () => {
-        openDb().then((db) => {
-            db.exec(`CREATE TABLE IF NOT EXISTS tasks ${taskTableColumns}`);
-        });
-    },
-
-    dropTable: () => {
-        openDb().then((db) => {
-            db.exec("DROP TABLE IF EXISTS tasks");
-        });
-    },
-
-    selectAllTasks: (ctx) => {
-        openDb().then((db) => {
-            db.all("SELECT * FROM tasks").then((tasks) => (ctx.body = tasks));
-        });
-    },
-
-    selectOneTask: (ctx) => {
-        const id = ctx.request.body.id;
-        openDb().then((db) => {
-            db.get("SELECT * FROM tasks WHERE id=?", [id]).then(
-                (task) => (ctx.response = task)
+    createTasksTable: async () => {
+        try {
+            const db = await openDb();
+            await db.exec(
+                `CREATE TABLE IF NOT EXISTS tasks ${taskTableColumns}`
             );
-        });
+        } catch (error) {
+            console.log("Table creation failed!", error);
+        }
     },
 
-    insertTask: (ctx) => {
+    selectAllTasks: async (ctx) => {
+        try {
+            const db = await openDb();
+            const tasks = await db.all("SELECT * FROM tasks");
+            ctx.body = tasks;
+
+            ctx.status = 200;
+        } catch (error) {
+            ctx.body = { ...error, msg: "Tasks selection failed!" };
+            ctx.status = 400;
+        }
+    },
+
+    selectOneTask: async (ctx) => {
+        const id = ctx.request.body.id;
+
+        try {
+            const db = await openDb();
+            const task = await db.get("SELECT * FROM tasks WHERE id=?", [id]);
+            ctx.body = task;
+
+            ctx.status = 200;
+        } catch (error) {
+            ctx.body = { ...error, msg: "Task selection failed!" };
+            ctx.status = 400;
+        }
+    },
+
+    insertTask: async (ctx) => {
         const task = ctx.request.body;
-        openDb().then((db) => {
-            db.run(
+
+        try {
+            const db = await openDb();
+            const newTask = await db.run(
                 "INSERT INTO tasks (title, description, duration, datetime) VALUES (?, ?, ?, ?)",
                 [task.title, task.description, task.duration, task.datetime]
             );
-        });
-        ctx.body = { statusCode: 200 };
+            ctx.body = { lastID: newTask.lastID };
+
+            ctx.status = 200;
+        } catch (error) {
+            ctx.body = { ...error, msg: "Task insertion failed!" };
+            ctx.status = 400;
+        }
     },
 
-    updateTask: (ctx) => {
+    updateTask: async (ctx) => {
         const task = ctx.request.body;
-        openDb().then((db) => {
-            db.run(
+
+        try {
+            const db = await openDb();
+            await db.get(
                 "UPDATE tasks SET title=?, description=?, duration=?, datetime=? WHERE id=?",
                 [
                     task.title,
@@ -67,15 +88,27 @@ export const dbMethods = {
                     task.id,
                 ]
             );
-        });
-        ctx.body = { statusCode: 200 };
+
+            ctx.body = { msg: "Task Updated successfully!" };
+            ctx.status = 200;
+        } catch (error) {
+            ctx.body = { ...error, msg: "Task update failed!" };
+            ctx.status = 400;
+        }
     },
 
-    deleteTask: (ctx) => {
+    deleteTask: async (ctx) => {
         const id = ctx.request.body.id;
-        openDb().then((db) => {
-            db.get("DELETE FROM tasks WHERE id=?", [id]).then((ctx) => ctx);
-        });
-        ctx.body = { statusCode: 200 };
+
+        try {
+            const db = await openDb();
+            await db.get("DELETE FROM tasks WHERE id=?", [id]);
+
+            ctx.body = { msg: "Task deleted successfully!" };
+            ctx.status = 200;
+        } catch (error) {
+            ctx.body = { ...error, msg: "Task deletion failed!" };
+            ctx.status = 400;
+        }
     },
 };

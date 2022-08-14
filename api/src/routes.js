@@ -5,9 +5,7 @@ import { dbMethods } from "./db.js";
 export const router = new Router();
 
 router.get("/", (ctx) => {
-    ctx.body = {
-        statusCode: 200,
-    };
+    ctx.body = { msg: "API server running!" };
 });
 
 router.get("/tasks", dbMethods.selectAllTasks);
