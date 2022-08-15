@@ -5,51 +5,48 @@ import { APIService } from "../services/apiService";
 export function useIndex() {
     const [tasksList, setTasksList] = useState<Task[]>([]),
         [task, setTask] = useState<Task | null>(null),
-        [id, setId] = useState(0),
+        [newTask, setNewTask] = useState(false),
         [title, setTitle] = useState(""),
         [description, setDescription] = useState(""),
-        [duration, setDuration] = useState(0),
-        [datetime, setDatetime] = useState(0),
+        [duration, setDuration] = useState(""),
+        [datetime, setDatetime] = useState(""),
         [message, setMessage] = useState("");
 
     useEffect(() => {
-        async () => {
-            const response = await APIService.get("/tasks");
+        APIService.get("/tasks").then((response) => {
             setTasksList(response.data);
-        };
+        });
     }, []);
 
-    async function createTask() {
-        if (task !== null) {
-            const response = await APIService.post("/task", {
-                title,
-                description,
-                duration,
-                datetime,
+    function insertTask() {
+        APIService.post("/task", {
+            title,
+            description,
+            duration,
+            datetime,
+        })
+            .then(() => {
+                setMessage(`Tarefa ${title} salva com sucesso!`);
+                setNewTask(false);
+            })
+            .catch((error) => {
+                setMessage(error.response?.data.message);
             });
-            try {
-                setId(response.data.id);
-                setTask(null);
-            } catch (error) {
-                setMessage(response.data.message);
-            }
-            return;
-        }
     }
 
     function resetTaskForm() {
         setTitle("");
         setDescription("");
-        setDuration(0);
-        setDatetime(0);
+        setDuration("");
+        setDatetime("");
     }
 
     return {
         tasksList,
         task,
         setTask,
-        id,
-        setId,
+        newTask,
+        setNewTask,
         title,
         setTitle,
         description,
@@ -60,7 +57,8 @@ export function useIndex() {
         setDatetime,
         message,
         setMessage,
-        createTask,
+
+        insertTask,
         resetTaskForm,
     };
 }
