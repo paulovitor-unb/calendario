@@ -5,7 +5,7 @@ import { dbMethods } from "./db.js";
 export const router = new Router();
 
 router.get("/", (ctx) => {
-    ctx.body = { msg: "API server running!" };
+    ctx.body = "API server running!";
 });
 
 router.get("/tasks", dbMethods.selectAllTasks);
