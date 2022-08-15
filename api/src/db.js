@@ -35,7 +35,7 @@ export const dbMethods = {
 
             ctx.status = 200;
         } catch (error) {
-            ctx.body = { ...error, msg: "Tasks selection failed!" };
+            ctx.body = { ...error, message: "Tasks selection failed!" };
             ctx.status = 400;
         }
     },
@@ -50,7 +50,7 @@ export const dbMethods = {
 
             ctx.status = 200;
         } catch (error) {
-            ctx.body = { ...error, msg: "Task selection failed!" };
+            ctx.body = { ...error, message: "Task selection failed!" };
             ctx.status = 400;
         }
     },
@@ -64,11 +64,11 @@ export const dbMethods = {
                 "INSERT INTO tasks (title, description, duration, datetime) VALUES (?, ?, ?, ?)",
                 [task.title, task.description, task.duration, task.datetime]
             );
-            ctx.body = { lastID: newTask.lastID };
+            ctx.body = { id: newTask.lastID };
 
             ctx.status = 200;
         } catch (error) {
-            ctx.body = { ...error, msg: "Task insertion failed!" };
+            ctx.body = { ...error, message: "Task insertion failed!" };
             ctx.status = 400;
         }
     },
@@ -89,10 +89,10 @@ export const dbMethods = {
                 ]
             );
 
-            ctx.body = { msg: "Task Updated successfully!" };
+            ctx.body = { message: "Task Updated successfully!" };
             ctx.status = 200;
         } catch (error) {
-            ctx.body = { ...error, msg: "Task update failed!" };
+            ctx.body = { ...error, message: "Task update failed!" };
             ctx.status = 400;
         }
     },
@@ -104,10 +104,10 @@ export const dbMethods = {
             const db = await openDb();
             await db.get("DELETE FROM tasks WHERE id=?", [id]);
 
-            ctx.body = { msg: "Task deleted successfully!" };
+            ctx.body = { message: "Task deleted successfully!" };
             ctx.status = 200;
         } catch (error) {
-            ctx.body = { ...error, msg: "Task deletion failed!" };
+            ctx.body = { ...error, message: "Task deletion failed!" };
             ctx.status = 400;
         }
     },
