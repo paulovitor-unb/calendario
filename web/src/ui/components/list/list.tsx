@@ -25,7 +25,9 @@ export default function List(props: ListProps) {
                     <CardHeader title={task.title} sx={{ p: 0 }} />
                     <CardContent sx={{ my: 2, p: 0 }}>
                         <Typography>{task.description}</Typography>
-                        <Typography>{task.duration}</Typography>
+                        <Typography>
+                            Duração: {task.duration} minutos
+                        </Typography>
                         <Input type="datetime-local" value={task.datetime} />
                     </CardContent>
                     <CardActions sx={{ p: 0 }}>
