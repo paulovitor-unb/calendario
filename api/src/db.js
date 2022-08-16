@@ -30,27 +30,32 @@ export const dbMethods = {
     selectAllTasks: async (ctx) => {
         try {
             const db = await openDb();
-            const tasks = await db.all("SELECT * FROM tasks");
-            ctx.body = tasks;
+            const tasksList = await db.all(
+                "SELECT * FROM tasks ORDER BY datetime"
+            );
+            ctx.body = tasksList;
 
             ctx.status = 200;
         } catch (error) {
-            ctx.body = { ...error, message: "Tasks selection failed!" };
+            ctx.body = { ...error, message: "Tasks list selection failed!" };
             ctx.status = 400;
         }
     },
 
-    selectOneTask: async (ctx) => {
-        const id = ctx.request.body.id;
+    selectSearchTasks: async (ctx) => {
+        const title = ctx.request.query.title;
 
         try {
             const db = await openDb();
-            const task = await db.get("SELECT * FROM tasks WHERE id=?", [id]);
-            ctx.body = task;
+            const tasksSearch = await db.all(
+                "SELECT * FROM tasks WHERE title LIKE %?% ORDER BY datetime",
+                [title]
+            );
+            ctx.body = tasksSearch;
 
             ctx.status = 200;
         } catch (error) {
-            ctx.body = { ...error, message: "Task selection failed!" };
+            ctx.body = { ...error, message: "Tasks search failed!" };
             ctx.status = 400;
         }
     },
