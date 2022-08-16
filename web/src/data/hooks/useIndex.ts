@@ -4,12 +4,13 @@ import { APIService } from "../services/apiService";
 
 export function useIndex() {
     const [tasksList, setTasksList] = useState<Task[]>([]),
-        [task, setTask] = useState<Task | null>(null),
-        [newTask, setNewTask] = useState(false),
-        [title, setTitle] = useState(""),
-        [description, setDescription] = useState(""),
-        [duration, setDuration] = useState(""),
-        [datetime, setDatetime] = useState(""),
+        [selectedTask, setSelectedTask] = useState<Task | undefined | null>(
+            null
+        ),
+        [title, setTitle] = useState<string | null>(""),
+        [description, setDescription] = useState<string | null>(""),
+        [duration, setDuration] = useState<number | null>(0),
+        [datetime, setDatetime] = useState<string | null>(""),
         [message, setMessage] = useState("");
 
     useEffect(() => {
@@ -26,27 +27,60 @@ export function useIndex() {
             datetime,
         })
             .then(() => {
-                setMessage(`Tarefa ${title} salva com sucesso!`);
-                setNewTask(false);
+                setMessage(`Tarefa ${title} inserida com sucesso!`);
+                setSelectedTask(null);
             })
             .catch((error) => {
                 setMessage(error.response?.data.message);
             });
     }
 
+    function updateTask() {
+        APIService.put("/task", {
+            id: selectedTask?.id,
+            title,
+            description,
+            duration,
+            datetime,
+        })
+            .then(() => {
+                setMessage(`Tarefa atualizada com sucesso!`);
+                setSelectedTask(null);
+            })
+            .catch((error) => {
+                setMessage(error.response?.data.message);
+            });
+    }
+
+    function deleteTask() {
+        APIService.delete("/task", { data: { id: selectedTask?.id } })
+            .then(() => {
+                setMessage(`Tarefa excluída com sucesso!`);
+                setSelectedTask(null);
+            })
+            .catch((error) => {
+                setMessage(error.response?.data.message);
+            });
+    }
+
+    function loadTaskForm(task: Task) {
+        setTitle(task.title);
+        setDescription(task.description);
+        setDuration(task.duration);
+        setDatetime(task.datetime);
+    }
+
     function resetTaskForm() {
         setTitle("");
         setDescription("");
-        setDuration("");
+        setDuration(0);
         setDatetime("");
     }
 
     return {
         tasksList,
-        task,
-        setTask,
-        newTask,
-        setNewTask,
+        selectedTask,
+        setSelectedTask,
         title,
         setTitle,
         description,
@@ -59,6 +93,9 @@ export function useIndex() {
         setMessage,
 
         insertTask,
+        updateTask,
+        deleteTask,
+        loadTaskForm,
         resetTaskForm,
     };
 }

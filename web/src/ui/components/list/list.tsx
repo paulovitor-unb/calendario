@@ -1,6 +1,5 @@
 import {
     Card,
-    CardActionArea,
     CardHeader,
     CardContent,
     CardActions,
@@ -22,23 +21,22 @@ export default function List(props: ListProps) {
     return (
         <CardsList>
             {props.tasks.map((task) => (
-                <Card key={task.id} sx={{ width: "100%", maxWidth: 300 }}>
-                    <CardActionArea sx={{ p: 2 }}>
-                        <CardHeader title={task.title} sx={{ p: 0 }} />
-                        <CardContent sx={{ my: 2, p: 0 }}>
-                            <Typography>{task.description}</Typography>
-                            <Typography>{task.duration}</Typography>
-                            <Input
-                                type="datetime-local"
-                                value={task.datetime}
-                            />
-                        </CardContent>
-                        <CardActions sx={{ p: 0 }}>
-                            <Button variant={"contained"} sx={{ gap: 1 }}>
-                                Editar <Edit />
-                            </Button>
-                        </CardActions>
-                    </CardActionArea>
+                <Card key={task.id} sx={{ p: 2, width: "100%", maxWidth: 300 }}>
+                    <CardHeader title={task.title} sx={{ p: 0 }} />
+                    <CardContent sx={{ my: 2, p: 0 }}>
+                        <Typography>{task.description}</Typography>
+                        <Typography>{task.duration}</Typography>
+                        <Input type="datetime-local" value={task.datetime} />
+                    </CardContent>
+                    <CardActions sx={{ p: 0 }}>
+                        <Button
+                            variant={"contained"}
+                            onClick={() => props.onSelect(task)}
+                            sx={{ gap: 1 }}
+                        >
+                            Editar <Edit />
+                        </Button>
+                    </CardActions>
                 </Card>
             ))}
         </CardsList>

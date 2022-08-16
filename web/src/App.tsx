@@ -3,10 +3,11 @@ import {
     Dialog,
     DialogActions,
     Grid,
+    Input,
     TextField,
     Snackbar,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { Add, Save, Delete } from "@mui/icons-material";
 
 import { useIndex } from "./data/hooks/useIndex";
 import List from "./ui/components/list/list";
@@ -14,10 +15,8 @@ import List from "./ui/components/list/list";
 function App() {
     const {
         tasksList,
-        task,
-        setTask,
-        newTask,
-        setNewTask,
+        selectedTask,
+        setSelectedTask,
         title,
         setTitle,
         description,
@@ -28,27 +27,37 @@ function App() {
         setDatetime,
         message,
         setMessage,
+
         insertTask,
+        updateTask,
+        deleteTask,
+        loadTaskForm,
         resetTaskForm,
     } = useIndex();
 
     return (
         <>
-            <List tasks={tasksList} onSelect={(task) => setTask(task)} />
+            <List
+                tasks={tasksList}
+                onSelect={(task) => {
+                    setSelectedTask(task);
+                    loadTaskForm(task);
+                }}
+            />
             <Button
                 variant={"contained"}
                 onClick={() => {
-                    setNewTask(true);
+                    setSelectedTask(undefined);
                 }}
                 sx={{ gap: 1 }}
             >
                 Inserir <Add />
             </Button>
             <Dialog
-                open={newTask}
+                open={selectedTask !== null}
                 PaperProps={{ sx: { p: 5 } }}
                 onClose={() => {
-                    setNewTask(false);
+                    setSelectedTask(null);
                     resetTaskForm();
                 }}
             >
@@ -56,7 +65,6 @@ function App() {
                     <Grid item xs={12}>
                         <TextField
                             label={"Título"}
-                            type="text"
                             variant="standard"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -65,7 +73,6 @@ function App() {
                     <Grid item xs={12}>
                         <TextField
                             label={"Descrição"}
-                            type="text"
                             variant="standard"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -77,7 +84,9 @@ function App() {
                             type="number"
                             variant="standard"
                             value={duration}
-                            onChange={(e) => setDuration(e.target.value)}
+                            onChange={(e) =>
+                                setDuration(Number(e.target.value))
+                            }
                         ></TextField>
                     </Grid>
                     <Grid item xs={12}>
@@ -94,15 +103,32 @@ function App() {
                 <DialogActions sx={{ mt: 5 }}>
                     <Button
                         onClick={() => {
-                            setNewTask(false);
+                            setSelectedTask(null);
                             resetTaskForm();
                         }}
                     >
                         Cancelar
                     </Button>
-                    <Button variant={"contained"} onClick={() => insertTask()}>
-                        Inserir Tarefa
+                    <Button
+                        variant={"contained"}
+                        onClick={() =>
+                            selectedTask === undefined
+                                ? insertTask()
+                                : updateTask()
+                        }
+                        sx={{ gap: 1 }}
+                    >
+                        Salvar <Save />
                     </Button>
+                    {selectedTask !== undefined && (
+                        <Button
+                            variant={"contained"}
+                            onClick={() => deleteTask()}
+                            sx={{ gap: 1 }}
+                        >
+                            Excluir <Delete />
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
             <Snackbar
