@@ -42,24 +42,6 @@ export const dbMethods = {
         }
     },
 
-    selectSearchTasks: async (ctx) => {
-        const title = ctx.request.query.title;
-
-        try {
-            const db = await openDb();
-            const tasksSearch = await db.all(
-                "SELECT * FROM tasks WHERE title LIKE %?% ORDER BY datetime",
-                [title]
-            );
-            ctx.body = tasksSearch;
-
-            ctx.status = 200;
-        } catch (error) {
-            ctx.body = { ...error, message: "Tasks search failed!" };
-            ctx.status = 400;
-        }
-    },
-
     insertTask: async (ctx) => {
         const task = ctx.request.body;
 
