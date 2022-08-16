@@ -3,13 +3,12 @@ import {
     Dialog,
     DialogActions,
     Grid,
-    Input,
     TextField,
     Snackbar,
 } from "@mui/material";
 import { Add, Save, Delete } from "@mui/icons-material";
 
-import { useIndex } from "./data/hooks/useIndex";
+import { useTasks } from "./data/hooks/useTasks";
 import List from "./ui/components/list/list";
 
 function App() {
@@ -28,12 +27,14 @@ function App() {
         message,
         setMessage,
 
+        selectAllTasks,
+        selectSearchTasks,
         insertTask,
         updateTask,
         deleteTask,
         loadTaskForm,
         resetTaskForm,
-    } = useIndex();
+    } = useTasks();
 
     return (
         <>
@@ -47,6 +48,14 @@ function App() {
             >
                 Inserir <Add />
             </Button>
+            <TextField
+                label={"Busca por título"}
+                onChange={(e) => {
+                    e.target.value
+                        ? selectSearchTasks(e.target.value)
+                        : selectAllTasks();
+                }}
+            ></TextField>
             <List
                 tasks={tasksList}
                 onSelect={(task) => {

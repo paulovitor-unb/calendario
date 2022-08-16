@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Task } from "../types/task";
 import { APIService } from "../services/apiService";
 
-export function useIndex() {
+export function useTasks() {
     const [tasksList, setTasksList] = useState<Task[]>([]),
         [selectedTask, setSelectedTask] = useState<Task | undefined | null>(
             null
@@ -14,10 +14,29 @@ export function useIndex() {
         [message, setMessage] = useState("");
 
     useEffect(() => {
-        APIService.get("/tasks").then((response) => {
-            setTasksList(response.data);
-        });
-    }, [tasksList]);
+        selectAllTasks();
+    }, []);
+
+    function selectAllTasks() {
+        APIService.get("/tasks", {})
+            .then((response) => {
+                setTasksList(response.data);
+            })
+            .catch((error) => {
+                setMessage(error.response?.data.message);
+            });
+    }
+
+    function selectSearchTasks(searchTitle: string) {
+        APIService.get("/task", { params: { searchTitle } })
+            .then((response) => {
+                console.log(response.data);
+                setTasksList(response.data);
+            })
+            .catch((error) => {
+                setMessage(error.response?.data.message);
+            });
+    }
 
     function insertTask() {
         APIService.post("/task", {
@@ -64,7 +83,7 @@ export function useIndex() {
     }
 
     function resetPageAfterOperation() {
-        setTasksList([]);
+        selectAllTasks();
         setSelectedTask(null);
         resetTaskForm();
     }
@@ -98,6 +117,8 @@ export function useIndex() {
         message,
         setMessage,
 
+        selectAllTasks,
+        selectSearchTasks,
         insertTask,
         updateTask,
         deleteTask,

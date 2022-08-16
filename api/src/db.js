@@ -43,13 +43,13 @@ export const dbMethods = {
     },
 
     selectSearchTasks: async (ctx) => {
-        const title = ctx.request.query.title;
+        const searchTitle = ctx.params.searchTitle;
 
         try {
             const db = await openDb();
             const tasksSearch = await db.all(
-                "SELECT * FROM tasks WHERE title LIKE %?% ORDER BY datetime",
-                [title]
+                "SELECT * FROM tasks WHERE title LIKE '%?%' ORDER BY datetime",
+                [searchTitle]
             );
             ctx.body = tasksSearch;
 
