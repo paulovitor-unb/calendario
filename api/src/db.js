@@ -1,3 +1,9 @@
+/*
+    Define as colunas da tabela de colunas
+    Cria o banco de dados
+    Define operações que podem ser realizadas no banco de dados através da API
+*/
+
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 

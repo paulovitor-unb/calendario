@@ -1,3 +1,10 @@
+/*
+    Base para a criação da SPA
+    Usa o Hook useTasks para ler e modificar as variáveis relacionadas às tarefas carregadas
+    Acrescenta o componente Dialog do Material UI para adicionar, alterar ou deletar tarefas do banco de dados
+    Utiliza o componente Snackbar do Material UI para mostrar mensagens passadas pela API
+*/
+
 import {
     Button,
     Dialog,
@@ -8,7 +15,7 @@ import {
 } from "@mui/material";
 import { Add, Save, Delete } from "@mui/icons-material";
 
-import { useIndex } from "./data/hooks/useIndex";
+import { useTasks } from "./data/hooks/useTasks";
 import List from "./ui/components/list/list";
 
 function App() {
@@ -32,7 +39,7 @@ function App() {
         deleteTask,
         loadTaskForm,
         resetTaskForm,
-    } = useIndex();
+    } = useTasks();
 
     return (
         <>

@@ -1,3 +1,8 @@
+/*
+    Configura o componente da lista de tarefas carregadas do banco de dados
+    Usa modelos do Material UI para criar cards para cada tarefa
+*/
+
 import {
     Card,
     CardHeader,

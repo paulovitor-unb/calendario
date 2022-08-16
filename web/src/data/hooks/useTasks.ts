@@ -1,3 +1,8 @@
+/*
+    Custom Hook que define as variáveis e funções relacionada à lista de tarefas do banco de dados
+    Define as funções para comunicar com a API pelo serviço definido no arquivo APIservice.ts
+*/
+
 import { useState, useEffect } from "react";
 import { Task } from "../types/task";
 import { APIService } from "../services/apiService";

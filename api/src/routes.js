@@ -1,3 +1,7 @@
+/*
+    Define as rotas aceitas via API e direciona para a função correspondente do banco de dados (db.js)
+*/
+
 import Router from "@koa/router";
 
 import { dbMethods } from "./db.js";

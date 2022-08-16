@@ -1,3 +1,7 @@
+/*
+    Cria o componente de id root para renderizar no layout em public/index.html
+*/
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";

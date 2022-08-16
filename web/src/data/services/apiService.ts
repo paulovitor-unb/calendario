@@ -1,3 +1,7 @@
+/*
+    Configura o axios para servir conexões com a API (APIService)
+*/
+
 import axios from "axios";
 
 export const APIService = axios.create({

@@ -1,3 +1,9 @@
+/*
+    Configura servidor com os middlewares do Koa
+    Configura variaveis de ambiente do arquivo .env
+    Cria tabela para tarefas no banco de dados
+*/
+
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import cors from "@koa/cors";
