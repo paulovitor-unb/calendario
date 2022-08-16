@@ -9,7 +9,7 @@ router.get("/", (ctx) => {
 });
 
 router.get("/tasks", dbMethods.selectAllTasks);
-router.get("/task/:title", dbMethods.selectSearchTasks);
+router.get("/tasks/:title", dbMethods.selectSearchTasks);
 router.post("/task", dbMethods.insertTask);
 router.put("/task", dbMethods.updateTask);
 router.delete("/task", dbMethods.deleteTask);
