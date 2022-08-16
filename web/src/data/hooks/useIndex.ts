@@ -17,7 +17,7 @@ export function useIndex() {
         APIService.get("/tasks").then((response) => {
             setTasksList(response.data);
         });
-    }, []);
+    }, [tasksList]);
 
     function insertTask() {
         APIService.post("/task", {
@@ -27,8 +27,8 @@ export function useIndex() {
             datetime,
         })
             .then(() => {
+                resetPageAfterOperation();
                 setMessage(`Tarefa ${title} inserida com sucesso!`);
-                setSelectedTask(null);
             })
             .catch((error) => {
                 setMessage(error.response?.data.message);
@@ -44,8 +44,8 @@ export function useIndex() {
             datetime,
         })
             .then(() => {
-                setMessage(`Tarefa atualizada com sucesso!`);
-                setSelectedTask(null);
+                resetPageAfterOperation();
+                setMessage("Tarefa atualizada com sucesso!");
             })
             .catch((error) => {
                 setMessage(error.response?.data.message);
@@ -55,12 +55,18 @@ export function useIndex() {
     function deleteTask() {
         APIService.delete("/task", { data: { id: selectedTask?.id } })
             .then(() => {
-                setMessage(`Tarefa excluída com sucesso!`);
-                setSelectedTask(null);
+                resetPageAfterOperation();
+                setMessage("Tarefa excluída com sucesso!");
             })
             .catch((error) => {
                 setMessage(error.response?.data.message);
             });
+    }
+
+    function resetPageAfterOperation() {
+        setTasksList([]);
+        setSelectedTask(null);
+        resetTaskForm();
     }
 
     function loadTaskForm(task: Task) {
