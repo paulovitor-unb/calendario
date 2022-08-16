@@ -38,13 +38,6 @@ function App() {
     return (
         <>
             <h1>Calendário</h1>
-            <List
-                tasks={tasksList}
-                onSelect={(task) => {
-                    setSelectedTask(task);
-                    loadTaskForm(task);
-                }}
-            />
             <Button
                 variant={"contained"}
                 onClick={() => {
@@ -54,6 +47,13 @@ function App() {
             >
                 Inserir <Add />
             </Button>
+            <List
+                tasks={tasksList}
+                onSelect={(task) => {
+                    setSelectedTask(task);
+                    loadTaskForm(task);
+                }}
+            />
             <Dialog
                 open={selectedTask !== null}
                 PaperProps={{ sx: { p: 5 } }}
@@ -73,6 +73,16 @@ function App() {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
+                            label="Data e hora"
+                            type="datetime-local"
+                            InputLabelProps={{ shrink: true }}
+                            variant="standard"
+                            value={datetime}
+                            onChange={(e) => setDatetime(e.target.value)}
+                        ></TextField>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
                             label={"Descrição"}
                             variant="standard"
                             value={description}
@@ -81,23 +91,13 @@ function App() {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label={"Duração"}
+                            label={"Duração (minutos)"}
                             type="number"
                             variant="standard"
                             value={duration}
                             onChange={(e) =>
                                 setDuration(Number(e.target.value))
                             }
-                        ></TextField>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Data e hora"
-                            type="datetime-local"
-                            InputLabelProps={{ shrink: true }}
-                            variant="standard"
-                            value={datetime}
-                            onChange={(e) => setDatetime(e.target.value)}
                         ></TextField>
                     </Grid>
                 </Grid>
@@ -124,6 +124,7 @@ function App() {
                     {selectedTask !== undefined && (
                         <Button
                             variant={"contained"}
+                            color={"error"}
                             onClick={() => deleteTask()}
                             sx={{ gap: 1 }}
                         >

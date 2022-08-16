@@ -24,11 +24,11 @@ export default function List(props: ListProps) {
                 <Card key={task.id} sx={{ p: 2, width: "100%", maxWidth: 300 }}>
                     <CardHeader title={task.title} sx={{ p: 0 }} />
                     <CardContent sx={{ my: 2, p: 0 }}>
+                        <Input type="datetime-local" value={task.datetime} />
                         <Typography>{task.description}</Typography>
                         <Typography>
                             Duração: {task.duration} minutos
                         </Typography>
-                        <Input type="datetime-local" value={task.datetime} />
                     </CardContent>
                     <CardActions sx={{ p: 0 }}>
                         <Button
