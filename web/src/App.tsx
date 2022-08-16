@@ -6,6 +6,7 @@ import {
     TextField,
     Snackbar,
 } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 import { useIndex } from "./data/hooks/useIndex";
 import List from "./ui/components/list/list";
@@ -33,15 +34,16 @@ function App() {
 
     return (
         <>
+            <List tasks={tasksList} onSelect={(task) => setTask(task)} />
             <Button
                 variant={"contained"}
                 onClick={() => {
                     setNewTask(true);
                 }}
+                sx={{ gap: 1 }}
             >
-                Inserir Tarefa
+                Inserir <Add />
             </Button>
-            <List tasks={tasksList} onSelect={(task) => setTask(task)} />
             <Dialog
                 open={newTask}
                 PaperProps={{ sx: { p: 5 } }}
